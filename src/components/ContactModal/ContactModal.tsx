@@ -5,15 +5,13 @@ import { Contact } from "../ContactsView/ContactsView";
 import { emailRegex, phoneRegex } from "../../utils/regex";
 
 interface Props {
-  mode: "create" | "edit";
   contact?: Contact;
-  formError?: { field: string; message: string };
   onClose: () => void;
   onCreate: (data: any) => void;
   onEdit: (id: string, data: any) => void;
 }
 
-function ContactModal({ mode, onClose, onCreate, onEdit, contact }: Props) {
+function ContactModal({ onClose, onCreate, onEdit, contact }: Props) {
   const [firstname, setFirstname] = useState(contact?.firstname || null);
   const [firstnameError, setFirstnameError] = useState("");
   const [lastname, setLastname] = useState(contact?.lastname || null);
@@ -23,6 +21,7 @@ function ContactModal({ mode, onClose, onCreate, onEdit, contact }: Props) {
   const [phone, setPhone] = useState(contact?.phone || null);
   const [phoneError, setPhoneError] = useState("");
 
+  const mode = !contact ? "create" : "edit";
   const handleSave = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = {

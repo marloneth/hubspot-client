@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import useAPI from "../../hooks/useAPI";
-import PaginationTable, { TableHeader } from "../Table/Table";
+import Table, { TableHeader } from "../Table/Table";
 import SearchBar from "../SearchBar/SearchBar";
 import { API_URL } from "../../config/constants";
 import ContactModal from "../ContactModal/ContactModal";
-import { Store } from "react-notifications-component";
+import { errorMessage, successMessage } from "../../utils/notifications";
 
 export interface Contact {
   createddate: string;
@@ -17,13 +17,10 @@ export interface Contact {
   phone: string;
 }
 
-const limit = 10;
-
 function ContactsView() {
   const [email, setEmail] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [currentContact, setCurrentContact] = useState<Contact>();
-  const [modalMode, setModalMode] = useState<"create" | "edit">("create");
   const { data, isLoading, fetchData } = useAPI();
 
   const contactHeaders: TableHeader[] = [
@@ -32,7 +29,7 @@ function ContactsView() {
     { name: "email", text: "Correo electrónico" },
   ];
 
-  const responseData = (data as unknown as Contact[]) || [];
+  const responseData = (data as unknown as { contacts: Contact[] }) || [];
 
   const searchByEmail = (email: string) => {
     setEmail(email);
@@ -44,15 +41,14 @@ function ContactsView() {
         `${API_URL}/contacts/${contactToDelete.hs_object_id}`,
         "DELETE"
       );
-
+      successMessage("¡Éxito!", "Contacto eliminado satisfactoriamente");
       fetchData(`${API_URL}/contacts`, "GET", { email });
     } catch (error) {
       handleError(error as Error);
     }
   };
 
-  const openModal = (mode: "create" | "edit") => {
-    setModalMode(mode);
+  const openModal = () => {
     setShowModal(true);
   };
 
@@ -63,6 +59,7 @@ function ContactsView() {
   const createContact = async (data: any) => {
     try {
       await fetchData(`${API_URL}/contacts`, "POST", undefined, data);
+      successMessage("¡Éxito!", "Contacto creado satisfactoriamente");
       setShowModal(false);
       fetchData(`${API_URL}/contacts`, "GET", { email });
     } catch (error) {
@@ -73,6 +70,7 @@ function ContactsView() {
   const editContact = async (id: string, data: any) => {
     try {
       await fetchData(`${API_URL}/contacts/${id}`, "PATCH", undefined, data);
+      successMessage("¡Éxito!", "Contacto editado satisfactoriamente");
       setShowModal(false);
       fetchData(`${API_URL}/contacts`, "GET", { email });
     } catch (error) {
@@ -81,19 +79,7 @@ function ContactsView() {
   };
 
   const handleError = (error: Error) => {
-    Store.addNotification({
-      title: "Error!",
-      message: error.message,
-      type: "danger",
-      insert: "top",
-      container: "top-right",
-      animationIn: ["animate__animated", "animate__fadeIn"],
-      animationOut: ["animate__animated", "animate__fadeOut"],
-      dismiss: {
-        duration: 3000,
-        onScreen: true,
-      },
-    });
+    errorMessage("¡Error!", error.message);
   };
 
   useEffect(() => {
@@ -121,29 +107,34 @@ function ContactsView() {
             className="flex h-10 bg-orange-400 pt-2"
             onClick={() => {
               setCurrentContact(undefined);
-              openModal("create");
+              openModal();
             }}
           >
             <FaPlus className="mt-1 mr-1" /> Crear
           </button>
         </div>
         {isLoading && <p>Loading ...</p>}
-        {!isLoading && responseData.length && (
-          <PaginationTable
+        {!isLoading && responseData?.contacts?.length && (
+          <Table
             headers={contactHeaders}
-            data={responseData as unknown as Record<string, string | number>[]}
+            data={
+              responseData.contacts as unknown as Record<
+                string,
+                string | number
+              >[]
+            }
             onDelete={deleteContact}
             onEdit={(row) => {
               setCurrentContact(row);
-              openModal("edit");
+              openModal();
             }}
             includeActions
           />
         )}
+        {!isLoading && !responseData?.contacts?.length && <p>No results</p>}
       </div>
       {showModal && (
         <ContactModal
-          mode={modalMode}
           contact={currentContact}
           onClose={closeModal}
           onCreate={createContact}

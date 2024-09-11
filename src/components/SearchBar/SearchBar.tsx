@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { IoClose, IoSearch } from "react-icons/io5";
 
 interface Props {
-  placeholder: string;
+  placeholder?: string;
   onSearch: (value: string) => void;
 }
 

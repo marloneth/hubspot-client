@@ -19,13 +19,7 @@ interface Props {
   onEdit?: (rowData: any) => void;
 }
 
-function PaginationTable({
-  data,
-  onEdit,
-  headers,
-  onDelete,
-  includeActions,
-}: Props) {
+function Table({ data, onEdit, headers, onDelete, includeActions }: Props) {
   return (
     <div className="w-full overflow-y-auto table-container">
       <table className="w-full border-collapse">
@@ -89,4 +83,4 @@ function PaginationTable({
   );
 }
 
-export default PaginationTable;
+export default Table;
