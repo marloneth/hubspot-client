@@ -94,9 +94,9 @@ function ContactModal({ onClose, onCreate, onEdit, contact }: Props) {
                 setFirstname(e.target.value)
               }
             />
-            {firstnameError && (
+            {firstnameError ? (
               <label className="text-xs text-red-600">{firstnameError}</label>
-            )}
+            ) : null}
           </div>
           <div className="flex flex-col mb-2">
             <label
@@ -115,9 +115,9 @@ function ContactModal({ onClose, onCreate, onEdit, contact }: Props) {
                 setLastname(e.target.value)
               }
             />
-            {lastnameError && (
+            {lastnameError ? (
               <label className="text-xs text-red-600">{lastnameError}</label>
-            )}
+            ) : null}
           </div>
           <div className="flex flex-col mb-2">
             <label
@@ -136,9 +136,9 @@ function ContactModal({ onClose, onCreate, onEdit, contact }: Props) {
                 setEmail(e.target.value)
               }
             />
-            {emailError && (
+            {emailError ? (
               <label className="text-xs text-red-600">{emailError}</label>
-            )}
+            ) : null}
           </div>
           <div className="flex flex-col mb-2">
             <label
@@ -157,9 +157,9 @@ function ContactModal({ onClose, onCreate, onEdit, contact }: Props) {
                 setPhone(e.target.value)
               }
             />
-            {phoneError && (
+            {phoneError ? (
               <label className="text-xs text-red-600">{phoneError}</label>
-            )}
+            ) : null}
           </div>
           <button
             type="submit"

@@ -113,8 +113,8 @@ function ContactsView() {
             <FaPlus className="mt-1 mr-1" /> Crear
           </button>
         </div>
-        {isLoading && <p>Loading ...</p>}
-        {!isLoading && responseData?.contacts?.length && (
+        {isLoading ? <p>Loading ...</p> : null}
+        {!isLoading && responseData?.contacts?.length ? (
           <Table
             headers={contactHeaders}
             data={
@@ -130,17 +130,19 @@ function ContactsView() {
             }}
             includeActions
           />
-        )}
-        {!isLoading && !responseData?.contacts?.length && <p>No results</p>}
+        ) : null}
+        {!isLoading && !responseData?.contacts?.length ? (
+          <p className="text-lg text-center mt-12">No results</p>
+        ) : null}
       </div>
-      {showModal && (
+      {showModal ? (
         <ContactModal
           contact={currentContact}
           onClose={closeModal}
           onCreate={createContact}
           onEdit={editContact}
         />
-      )}
+      ) : null}
     </div>
   );
 }

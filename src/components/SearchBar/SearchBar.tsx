@@ -34,7 +34,7 @@ export function SearchBar({ placeholder = "Buscar ...", onSearch }: Props) {
           value={searchText}
           onChange={handleInputChange}
         />
-        {searchText && (
+        {searchText ? (
           <button
             type="button"
             onClick={handleClear}
@@ -42,7 +42,7 @@ export function SearchBar({ placeholder = "Buscar ...", onSearch }: Props) {
           >
             <IoClose />
           </button>
-        )}
+        ) : null}
       </div>
       <button type="submit" className="bg-orange-400">
         Buscar
