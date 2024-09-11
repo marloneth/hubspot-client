@@ -50,10 +50,10 @@ npm run preview
 
 ## Execute unit tests
 
-To execute the unit tests you just have to run the corresponding command
+To execute the unit tests you just have to run the related command
 
 ```sh
 npm run test
 ```
 
-That will start running the tests suites and will show if everything was ok or of some test failed
+That will start running the tests suites and will show if everything was ok or if some test failed
